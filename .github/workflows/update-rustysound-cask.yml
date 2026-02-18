@@ -1,0 +1,40 @@
+name: Update RustySound Cask
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+  repository_dispatch:
+    types: [rustysound_release]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-rustysound-cask
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tap repository
+        uses: actions/checkout@v4
+
+      - name: Update cask version and checksum
+        id: update
+        run: bash .github/scripts/update-rustysound-cask.sh
+
+      - name: Commit and push changes
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Casks/rustysound.rb
+          git commit -m "rustysound ${{ steps.update.outputs.version }}"
+          git push
+
+      - name: No changes
+        if: steps.update.outputs.changed != 'true'
+        run: echo "RustySound cask already up to date."
