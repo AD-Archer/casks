@@ -8,7 +8,7 @@ Homebrew tap for casks published by AD-Archer.
 brew tap ad-archer/casks
 ```
 
-## Install RustySound
+## Install [RustySound](https://github.com/AD-Archer/RustySound)
 
 ```bash
 brew install --cask rustysound
@@ -23,7 +23,7 @@ brew upgrade --cask rustysound
 
 ## Available casks
 
-- `rustysound`
+- [`rustysound`](https://github.com/AD-Archer/RustySound)
 
 ## Automation
 
