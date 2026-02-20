@@ -22,7 +22,12 @@ jobs:
 
       - name: Update cask version and checksum
         id: update
-        run: bash .github/scripts/update-rustysound-cask.sh
+        run: |
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            export RELEASE_TAG='${{ github.event.client_payload.version }}'
+            echo "Using dispatched release tag: ${RELEASE_TAG}"
+          fi
+          bash .github/scripts/update-rustysound-cask.sh
 
       - name: Commit and push changes
         if: steps.update.outputs.changed == 'true'
